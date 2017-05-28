@@ -33,23 +33,25 @@
             this.telaJogador = new System.Windows.Forms.PictureBox();
             this.telaMenu = new System.Windows.Forms.PictureBox();
             this.animTimer = new System.Windows.Forms.Timer(this.components);
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.txtCoordenadas = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pnlStatus = new System.Windows.Forms.Panel();
+            this.lblCoord = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.pnlBotoes = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).BeginInit();
-            this.statusStrip1.SuspendLayout();
+            this.pnlStatus.SuspendLayout();
+            this.pnlBotoes.SuspendLayout();
             this.SuspendLayout();
             // 
             // telaInimigo
             // 
-            this.telaInimigo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.telaInimigo.BackColor = System.Drawing.SystemColors.Control;
+            this.telaInimigo.BackColor = System.Drawing.Color.White;
+            this.telaInimigo.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.telaInimigo.Location = new System.Drawing.Point(12, 12);
             this.telaInimigo.Name = "telaInimigo";
-            this.telaInimigo.Size = new System.Drawing.Size(512, 512);
+            this.telaInimigo.Size = new System.Drawing.Size(400, 400);
             this.telaInimigo.TabIndex = 0;
             this.telaInimigo.TabStop = false;
             this.telaInimigo.Paint += new System.Windows.Forms.PaintEventHandler(this.tela_Paint);
@@ -60,13 +62,11 @@
             // 
             // telaJogador
             // 
-            this.telaJogador.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.telaJogador.BackColor = System.Drawing.SystemColors.Control;
-            this.telaJogador.Location = new System.Drawing.Point(570, 12);
+            this.telaJogador.BackColor = System.Drawing.Color.White;
+            this.telaJogador.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.telaJogador.Location = new System.Drawing.Point(418, 12);
             this.telaJogador.Name = "telaJogador";
-            this.telaJogador.Size = new System.Drawing.Size(512, 512);
+            this.telaJogador.Size = new System.Drawing.Size(400, 400);
             this.telaJogador.TabIndex = 1;
             this.telaJogador.TabStop = false;
             this.telaJogador.Paint += new System.Windows.Forms.PaintEventHandler(this.tela_Paint);
@@ -77,13 +77,11 @@
             // 
             // telaMenu
             // 
-            this.telaMenu.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.telaMenu.BackColor = System.Drawing.SystemColors.Control;
-            this.telaMenu.Location = new System.Drawing.Point(12, 530);
+            this.telaMenu.BackColor = System.Drawing.Color.White;
+            this.telaMenu.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.telaMenu.Location = new System.Drawing.Point(12, 424);
             this.telaMenu.Name = "telaMenu";
-            this.telaMenu.Size = new System.Drawing.Size(1070, 146);
+            this.telaMenu.Size = new System.Drawing.Size(806, 165);
             this.telaMenu.TabIndex = 2;
             this.telaMenu.TabStop = false;
             // 
@@ -93,42 +91,82 @@
             this.animTimer.Interval = 16;
             this.animTimer.Tick += new System.EventHandler(this.animTimer_Tick);
             // 
-            // statusStrip1
+            // pnlStatus
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.txtCoordenadas});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 685);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1094, 22);
-            this.statusStrip1.TabIndex = 3;
-            this.statusStrip1.Text = "statusStrip1";
+            this.pnlStatus.BackColor = System.Drawing.Color.White;
+            this.pnlStatus.Controls.Add(this.lblStatus);
+            this.pnlStatus.Controls.Add(this.lblCoord);
+            this.pnlStatus.Location = new System.Drawing.Point(824, 12);
+            this.pnlStatus.Name = "pnlStatus";
+            this.pnlStatus.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.pnlStatus.Size = new System.Drawing.Size(195, 400);
+            this.pnlStatus.TabIndex = 3;
             // 
-            // txtCoordenadas
+            // lblCoord
             // 
-            this.txtCoordenadas.Name = "txtCoordenadas";
-            this.txtCoordenadas.Size = new System.Drawing.Size(30, 17);
-            this.txtCoordenadas.Text = "X: Y:";
+            this.lblCoord.AutoSize = true;
+            this.lblCoord.Location = new System.Drawing.Point(13, 372);
+            this.lblCoord.Name = "lblCoord";
+            this.lblCoord.Size = new System.Drawing.Size(67, 15);
+            this.lblCoord.TabIndex = 0;
+            this.lblCoord.Text = "XYXYXYXY";
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.ForeColor = System.Drawing.Color.Blue;
+            this.lblStatus.Location = new System.Drawing.Point(13, 10);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(124, 15);
+            this.lblStatus.TabIndex = 1;
+            this.lblStatus.Text = "Escolhendo posições";
+            // 
+            // pnlBotoes
+            // 
+            this.pnlBotoes.BackColor = System.Drawing.Color.White;
+            this.pnlBotoes.Controls.Add(this.label1);
+            this.pnlBotoes.Location = new System.Drawing.Point(824, 424);
+            this.pnlBotoes.Name = "pnlBotoes";
+            this.pnlBotoes.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlBotoes.Size = new System.Drawing.Size(194, 165);
+            this.pnlBotoes.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(77, 57);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 15);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Botoes aqui";
             // 
             // FrmJogo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1094, 707);
-            this.Controls.Add(this.statusStrip1);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(1030, 601);
+            this.Controls.Add(this.pnlBotoes);
+            this.Controls.Add(this.pnlStatus);
             this.Controls.Add(this.telaMenu);
             this.Controls.Add(this.telaJogador);
             this.Controls.Add(this.telaInimigo);
+            this.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmJogo";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "Batalha Naval";
+            this.Shown += new System.EventHandler(this.FrmJogo_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.pnlStatus.ResumeLayout(false);
+            this.pnlStatus.PerformLayout();
+            this.pnlBotoes.ResumeLayout(false);
+            this.pnlBotoes.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -138,8 +176,11 @@
         private System.Windows.Forms.PictureBox telaJogador;
         private System.Windows.Forms.PictureBox telaMenu;
         private System.Windows.Forms.Timer animTimer;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel txtCoordenadas;
+        private System.Windows.Forms.Panel pnlStatus;
+        private System.Windows.Forms.Label lblCoord;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Panel pnlBotoes;
+        private System.Windows.Forms.Label label1;
     }
 }
 

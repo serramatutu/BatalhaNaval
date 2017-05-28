@@ -6,36 +6,27 @@ using Protocolo;
 
 namespace BatalhaNaval
 {
-    class TabuleiroGrafico : Tabuleiro
+    abstract class TabuleiroGrafico
     {
-        const int GRID_SIZE = 12;
-        private readonly int LINE_WIDTH = 0; // em px
-        public static readonly Color LINE_COLOR = Color.Black;
+        const int TAMANHO_GRADE = 10;
+        public readonly int TAMANHO_LINHA = 0; // em px
+        public static readonly Color COR_LINHA = Color.Black;
 
-        private readonly Image hoverImage, clickImage, idleHoverImage, idleClickImage;
-
-        public TabuleiroGrafico(string idleHoverImage, string idleClickImage, string hoverImage, string clickImage) : base()
+        #region Metodos de Pintar (não é PlayDoh)
+        protected void DesenharLinhas(Graphics g, float width, float height)
         {
-            this.idleHoverImage = Image.FromFile(idleHoverImage);
-            this.idleClickImage = Image.FromFile(idleClickImage);
-            this.hoverImage = Image.FromFile(hoverImage);
-            this.clickImage = Image.FromFile(clickImage);
-        }
-
-        private void DrawGridLines(Graphics g, float width, float height)
-        {
-            if (LINE_WIDTH <= 0)
+            if (TAMANHO_LINHA <= 0)
                 return;
 
-            Pen p = new Pen(LINE_COLOR, LINE_WIDTH);
+            Pen p = new Pen(COR_LINHA, TAMANHO_LINHA);
 
-            float offset = LINE_WIDTH / 2f;
+            float offset = TAMANHO_LINHA / 2f;
 
             // +2 porque inclui as bordas.
-            for (int i = 0; i < GRID_SIZE + 2; i++)
+            for (int i = 0; i < TAMANHO_GRADE + 2; i++)
             {
-                float posy = (i * ((height - LINE_WIDTH) / GRID_SIZE)) + offset,
-                      posx = (i * ((width - LINE_WIDTH) / GRID_SIZE)) + offset;
+                float posy = (i * ((height - TAMANHO_LINHA) / TAMANHO_GRADE)) + offset,
+                      posx = (i * ((width - TAMANHO_LINHA) / TAMANHO_GRADE)) + offset;
 
                 lock (g)
                 {
@@ -45,22 +36,25 @@ namespace BatalhaNaval
             }
         }
 
-        private void DrawOnMousePos(Graphics g, float width, float height, Image img)
+        protected void DesenharNaCelulaDoMouse(Graphics g, float width, float height, Image img)
         {
             Point gridPos = GetMouseGridPos(width, height);
 
-            if (gridPos.X > GRID_SIZE || gridPos.Y > GRID_SIZE)
+            if (gridPos.X > TAMANHO_GRADE || gridPos.Y > TAMANHO_GRADE)
                 throw new InvalidOperationException("As definições do Graphics passado como parâmentro não condizem com" +
                                                     " a posição do mouse passada.");
 
             lock (g)
                 g.DrawImage(img,
-                            gridPos.X * ((width - LINE_WIDTH) / GRID_SIZE) + LINE_WIDTH,
-                            gridPos.Y * ((height - LINE_WIDTH) / GRID_SIZE) + LINE_WIDTH,
-                            width / GRID_SIZE - LINE_WIDTH,
-                            height / GRID_SIZE - LINE_WIDTH);
+                            gridPos.X * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                            gridPos.Y * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                            width / TAMANHO_GRADE - TAMANHO_LINHA,
+                            height / TAMANHO_GRADE - TAMANHO_LINHA);
         }
 
+        #endregion
+
+        #region Eventos Paint
         public void Paint(Graphics g)
         {
             lock (g)
@@ -69,21 +63,24 @@ namespace BatalhaNaval
             float height = g.VisibleClipBounds.Height,
                   width = g.VisibleClipBounds.Width;
 
-            DrawGridLines(g, width, height);
+            DesenharLinhas(g, width, height);
 
-            if (mouseDownPosition != null)
-                DrawOnMousePos(g, width, height, clickImage);
-            else if (mousePosition != null)
-                DrawOnMousePos(g, width, height, hoverImage);
+            OnPaint(g, width, height);
         }
 
-        private Point? mousePosition;
-        private Point? mouseDownPosition;
+        protected delegate void PaintEvent(Graphics g, float width, float height);
+        protected event PaintEvent OnPaint;
+
+        #endregion
+
+        #region Mouse
+        protected Point? mousePosition;
+        protected Point? mouseDownPosition;
 
         public Point GetMouseGridPos(float width, float height)
         {
-            return new Point(Util.Range(0, width, GRID_SIZE, mousePosition.Value.X),
-                             Util.Range(0, height, GRID_SIZE, mousePosition.Value.Y));
+            return new Point(Util.Range(0, width, TAMANHO_GRADE, mousePosition.Value.X),
+                             Util.Range(0, height, TAMANHO_GRADE, mousePosition.Value.Y));
         }
 
         public void MouseLeave()
@@ -106,14 +103,6 @@ namespace BatalhaNaval
             this.mouseDownPosition = null;
         }
 
-        public new int NumeroDeColunas
-        {
-            get { return GRID_SIZE; }
-        }
-
-        public new int NumeroDeLinhas
-        {
-            get { return GRID_SIZE; }
-        }
+        #endregion
     }
 }
