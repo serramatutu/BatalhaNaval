@@ -7,14 +7,22 @@ namespace BatalhaNaval
 {
     public partial class FrmJogo : Form
     {
+        private enum Status
+        {
+            PosicionandoBarcos,
+            Conectando,
+            Jogando
+        }
+
         const int FPS = 60;
 
         TabuleiroInimigo tInimigo;
         TabuleiroJogador tJogador;
 
+        GerenciadorDeNavios distribuidorDeBarcos;
         ClienteP2P cliente;
 
-        private bool jogando = false;
+        private Status status = Status.PosicionandoBarcos;
 
         public FrmJogo()
         {
@@ -26,9 +34,27 @@ namespace BatalhaNaval
             animTimer.Interval = 1000 / FPS;
         }
 
-        private bool Conectar()
+        private void Conectar()
         {
-            return new FrmConectar(cliente).ShowDialog(this) == DialogResult.OK;
+            FrmConectar frm = new FrmConectar(cliente);
+
+            Status anterior = status;
+            status = Status.Conectando;
+
+            if (frm.ShowDialog(this) == DialogResult.OK)
+                status = Status.Jogando;
+            else
+                status = anterior;
+        }
+
+        private void PosicionarNavios()
+        {
+            tJogador = new TabuleiroJogador();
+            tInimigo = new TabuleiroInimigo();
+
+            distribuidorDeBarcos = new GerenciadorDeNavios(telaMenu.Width, telaMenu.Height);
+
+            status = Status.PosicionandoBarcos;
         }
 
         #region Eventos do jogo
@@ -54,6 +80,7 @@ namespace BatalhaNaval
         {
             telaInimigo.Invalidate();
             telaJogador.Invalidate();
+            telaMenu.Invalidate();
         }
 
         private void tela_Paint(object sender, PaintEventArgs e)
@@ -87,9 +114,17 @@ namespace BatalhaNaval
         }
         #endregion
 
+
+
         private void FrmJogo_Shown(object sender, EventArgs e)
         {
-            Conectar();
+            PosicionarNavios();
+        }
+
+        private void telaMenu_Paint(object sender, PaintEventArgs e)
+        {
+            if (status == Status.PosicionandoBarcos)
+                distribuidorDeBarcos.Paint(e.Graphics);
         }
     }
 }

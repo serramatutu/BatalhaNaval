@@ -34,8 +34,8 @@
             this.telaMenu = new System.Windows.Forms.PictureBox();
             this.animTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlStatus = new System.Windows.Forms.Panel();
-            this.lblCoord = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.lblCoord = new System.Windows.Forms.Label();
             this.pnlBotoes = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).BeginInit();
@@ -84,6 +84,7 @@
             this.telaMenu.Size = new System.Drawing.Size(806, 165);
             this.telaMenu.TabIndex = 2;
             this.telaMenu.TabStop = false;
+            this.telaMenu.Paint += new System.Windows.Forms.PaintEventHandler(this.telaMenu_Paint);
             // 
             // animTimer
             // 
@@ -98,18 +99,9 @@
             this.pnlStatus.Controls.Add(this.lblCoord);
             this.pnlStatus.Location = new System.Drawing.Point(824, 12);
             this.pnlStatus.Name = "pnlStatus";
-            this.pnlStatus.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.pnlStatus.Padding = new System.Windows.Forms.Padding(10);
             this.pnlStatus.Size = new System.Drawing.Size(195, 400);
             this.pnlStatus.TabIndex = 3;
-            // 
-            // lblCoord
-            // 
-            this.lblCoord.AutoSize = true;
-            this.lblCoord.Location = new System.Drawing.Point(13, 372);
-            this.lblCoord.Name = "lblCoord";
-            this.lblCoord.Size = new System.Drawing.Size(67, 15);
-            this.lblCoord.TabIndex = 0;
-            this.lblCoord.Text = "XYXYXYXY";
             // 
             // lblStatus
             // 
@@ -120,6 +112,15 @@
             this.lblStatus.Size = new System.Drawing.Size(124, 15);
             this.lblStatus.TabIndex = 1;
             this.lblStatus.Text = "Escolhendo posições";
+            // 
+            // lblCoord
+            // 
+            this.lblCoord.AutoSize = true;
+            this.lblCoord.Location = new System.Drawing.Point(13, 372);
+            this.lblCoord.Name = "lblCoord";
+            this.lblCoord.Size = new System.Drawing.Size(53, 15);
+            this.lblCoord.TabIndex = 0;
+            this.lblCoord.Text = "X: * / Y: *";
             // 
             // pnlBotoes
             // 
@@ -151,7 +152,7 @@
             this.Controls.Add(this.telaMenu);
             this.Controls.Add(this.telaJogador);
             this.Controls.Add(this.telaInimigo);
-            this.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GerenciadorDeNavios.cs" />
     <Compile Include="FrmConectar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +131,13 @@
   <ItemGroup>
     <Content Include="Resources\enemyClick.png" />
     <Content Include="Resources\enemyHover.png" />
+    <Content Include="Resources\idleClick.png" />
+    <Content Include="Resources\idleHover.png" />
+    <Content Include="Resources\navios\cruzador.png" />
+    <Content Include="Resources\navios\destroier.png" />
+    <Content Include="Resources\navios\encouracado.png" />
+    <Content Include="Resources\navios\porta-avioes.png" />
+    <Content Include="Resources\navios\submarino.png" />
     <Content Include="Resources\ocean.png" />
     <Content Include="Resources\playerClick.png" />
     <Content Include="Resources\playerHover.png" />
