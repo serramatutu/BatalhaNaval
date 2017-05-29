@@ -90,17 +90,15 @@ namespace BatalhaNaval
             Arranjado = false;
         }
 
+        public void Remover(TipoDeNavio navio)
+        {
+            navios.Remove(navios.First(kvp => kvp.Value == navio).Key);
+            Arranjado = false;
+        }
+
         public void Adicionar(TipoDeNavio navio)
         {
-            while (true)
-                try
-                {
-                    navios.Add(Rectangle.Empty, navio);
-                    break;
-                }
-                catch { }            
-
-
+            navios.Add(Rectangle.Empty, navio);
             Rearranjar();
         }
 

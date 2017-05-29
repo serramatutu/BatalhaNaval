@@ -132,17 +132,7 @@ namespace BatalhaNaval
 
         # region Drag Drop
 
-        int direcao = 0;
-        bool dragging;
-        bool Dragging
-        {
-            get { return dragging; }
-            set
-            {
-                direcao = 0;
-                dragging = value;
-            }
-        }
+        //int direcao = 0;
 
         private void telaMenu_MouseDown(object sender, MouseEventArgs e)
         {
@@ -152,54 +142,43 @@ namespace BatalhaNaval
             TipoDeNavio? navio = gerenciadorDeNavios.NavioEm(e.Location);
             if (navio.HasValue)
             {
-                gerenciadorDeNavios.Remover(e.Location);
-                gerenciadorDeNavios.Rearranjar();
-                Dragging = true;
-                DoDragDrop(navio, DragDropEffects.Copy);
+                //DoDragDrop(navio, DragDropEffects.Copy);
             }
         }
 
-        private void AumentarDirecao()
-        {
-            if (Dragging)
-                direcao = (direcao + 1) % 3;
-        }
+        //private void AumentarDirecao()
+        //{
+        //     direcao = (direcao + 1) % 3;
+        //}
 
-        private void FrmJogo_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (Dragging && e.Button == MouseButtons.Right)
-                AumentarDirecao();
-        }
+        //private void FrmJogo_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Right)
+        //        AumentarDirecao();
+        //}
 
-        private void telaBarco_DragOver(object sender, DragEventArgs e)
-        {
-            if (sender == null)
-                return;
+        //private void telaJogador_DragOver(object sender, DragEventArgs e)
+        //{
+        //    if (sender == null)
+        //        return;
 
-            if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
-                e.Effect = DragDropEffects.Copy;
-        }
+        //    tJogador.MouseDown(telaJogador.PointToClient(new Point(e.X, e.Y)));
+        //    if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
+        //        e.Effect = DragDropEffects.Copy;
+        //}
 
-        private void telaMenu_DragDrop(object sender, DragEventArgs e)
-        {
-            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
-            if (navio.HasValue)
-                gerenciadorDeNavios.Adicionar(navio.Value);
+        //private void telaJogador_DragDrop(object sender, DragEventArgs e)
+        //{
+        //    TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
 
-            Dragging = false;
-        }
-
-        private void telaJogador_DragDrop(object sender, DragEventArgs e)
-        {
-            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
-            tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)));
-
-            Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
-            if (navio.HasValue)
-                tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
-
-            Dragging = false;
-        }
+        //    Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
+        //    if (navio.HasValue)
+        //    {
+        //        tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
+        //        gerenciadorDeNavios.Remover(navio.Value);
+        //        gerenciadorDeNavios.Rearranjar();
+        //    }
+        //}
 
         #endregion
     }

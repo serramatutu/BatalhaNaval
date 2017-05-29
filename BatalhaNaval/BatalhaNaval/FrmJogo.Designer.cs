@@ -69,8 +69,8 @@
             this.telaJogador.Size = new System.Drawing.Size(400, 400);
             this.telaJogador.TabIndex = 1;
             this.telaJogador.TabStop = false;
-            this.telaJogador.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragDrop);
-            this.telaJogador.DragOver += new System.Windows.Forms.DragEventHandler(this.telaBarco_DragOver);
+            //this.telaJogador.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragDrop);
+            //this.telaJogador.DragOver += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragOver);
             this.telaJogador.Paint += new System.Windows.Forms.PaintEventHandler(this.tela_Paint);
             this.telaJogador.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tela_MouseDown);
             this.telaJogador.MouseLeave += new System.EventHandler(this.tela_MouseLeave);
@@ -86,8 +86,6 @@
             this.telaMenu.Size = new System.Drawing.Size(806, 165);
             this.telaMenu.TabIndex = 2;
             this.telaMenu.TabStop = false;
-            this.telaMenu.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaMenu_DragDrop);
-            this.telaMenu.DragOver += new System.Windows.Forms.DragEventHandler(this.telaBarco_DragOver);
             this.telaMenu.Paint += new System.Windows.Forms.PaintEventHandler(this.telaMenu_Paint);
             this.telaMenu.MouseDown += new System.Windows.Forms.MouseEventHandler(this.telaMenu_MouseDown);
             // 
@@ -165,7 +163,7 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "Batalha Naval";
             this.Shown += new System.EventHandler(this.FrmJogo_Shown);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FrmJogo_MouseDown);
+            //this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FrmJogo_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).EndInit();
