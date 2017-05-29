@@ -16,7 +16,8 @@ namespace BatalhaNaval
 
         public bool Arranjado { get; set; } = true;
 
-        public int Width { get => width;
+        public int Width {
+            get { return width; }
             set
             {
                 if (value < 0)
@@ -28,7 +29,7 @@ namespace BatalhaNaval
 
         public int Height
         {
-            get => height;
+            get { return height; }
             set
             {
                 if (value < 0)

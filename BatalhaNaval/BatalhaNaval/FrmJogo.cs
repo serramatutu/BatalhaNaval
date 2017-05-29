@@ -136,7 +136,7 @@ namespace BatalhaNaval
         bool dragging;
         bool Dragging
         {
-            get => dragging;
+            get { return dragging; }
             set
             {
                 direcao = 0;
@@ -155,7 +155,7 @@ namespace BatalhaNaval
                 gerenciadorDeNavios.Remover(e.Location);
                 gerenciadorDeNavios.Rearranjar();
                 Dragging = true;
-                DoDragDrop(navio, DragDropEffects.Move);
+                DoDragDrop(navio, DragDropEffects.Copy);
             }
         }
 
@@ -177,7 +177,7 @@ namespace BatalhaNaval
                 return;
 
             if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
-                e.Effect = DragDropEffects.Move;
+                e.Effect = DragDropEffects.Copy;
         }
 
         private void telaMenu_DragDrop(object sender, DragEventArgs e)
