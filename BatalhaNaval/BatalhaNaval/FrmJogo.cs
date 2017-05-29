@@ -9,7 +9,7 @@ namespace BatalhaNaval
     {
         private enum Status
         {
-            PosicionandoBarcos,
+            PosicionandoNavios,
             Conectando,
             Jogando
         }
@@ -19,10 +19,10 @@ namespace BatalhaNaval
         TabuleiroInimigo tInimigo;
         TabuleiroJogador tJogador;
 
-        GerenciadorDeNavios distribuidorDeBarcos;
+        GerenciadorDeNavios gerenciadorDeNavios;
         ClienteP2P cliente;
 
-        private Status status = Status.PosicionandoBarcos;
+        private Status status = Status.PosicionandoNavios;
 
         public FrmJogo()
         {
@@ -30,6 +30,9 @@ namespace BatalhaNaval
 
             tJogador = new TabuleiroJogador();
             tInimigo = new TabuleiroInimigo();
+
+            telaJogador.AllowDrop = true;
+            telaMenu.AllowDrop = true;
 
             animTimer.Interval = 1000 / FPS;
         }
@@ -52,9 +55,9 @@ namespace BatalhaNaval
             tJogador = new TabuleiroJogador();
             tInimigo = new TabuleiroInimigo();
 
-            distribuidorDeBarcos = new GerenciadorDeNavios(telaMenu.Width, telaMenu.Height);
+            gerenciadorDeNavios = new GerenciadorDeNavios(telaMenu.Width, telaMenu.Height);
 
-            status = Status.PosicionandoBarcos;
+            status = Status.PosicionandoNavios;
         }
 
         #region Eventos do jogo
@@ -123,8 +126,81 @@ namespace BatalhaNaval
 
         private void telaMenu_Paint(object sender, PaintEventArgs e)
         {
-            if (status == Status.PosicionandoBarcos)
-                distribuidorDeBarcos.Paint(e.Graphics);
+            if (status == Status.PosicionandoNavios)
+                gerenciadorDeNavios.Paint(e.Graphics);
         }
+
+        # region Drag Drop
+
+        int direcao = 0;
+        bool dragging;
+        bool Dragging
+        {
+            get => dragging;
+            set
+            {
+                direcao = 0;
+                dragging = value;
+            }
+        }
+
+        private void telaMenu_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (status != Status.PosicionandoNavios)
+                return;
+
+            TipoDeNavio? navio = gerenciadorDeNavios.NavioEm(e.Location);
+            if (navio.HasValue)
+            {
+                gerenciadorDeNavios.Remover(e.Location);
+                gerenciadorDeNavios.Rearranjar();
+                Dragging = true;
+                DoDragDrop(navio, DragDropEffects.Move);
+            }
+        }
+
+        private void AumentarDirecao()
+        {
+            if (Dragging)
+                direcao = (direcao + 1) % 3;
+        }
+
+        private void FrmJogo_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (Dragging && e.Button == MouseButtons.Right)
+                AumentarDirecao();
+        }
+
+        private void telaBarco_DragOver(object sender, DragEventArgs e)
+        {
+            if (sender == null)
+                return;
+
+            if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
+                e.Effect = DragDropEffects.Move;
+        }
+
+        private void telaMenu_DragDrop(object sender, DragEventArgs e)
+        {
+            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
+            if (navio.HasValue)
+                gerenciadorDeNavios.Adicionar(navio.Value);
+
+            Dragging = false;
+        }
+
+        private void telaJogador_DragDrop(object sender, DragEventArgs e)
+        {
+            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
+            tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)));
+
+            Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
+            if (navio.HasValue)
+                tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
+
+            Dragging = false;
+        }
+
+        #endregion
     }
 }

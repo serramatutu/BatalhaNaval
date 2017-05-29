@@ -73,5 +73,11 @@ namespace Utils
 
             return (value - rangeStart) * intervals / (rangeEnd - rangeStart);
         }
+
+        public static bool PointInRectangle(Point p, Rectangle rect)
+        {
+            return p.X >= rect.X && p.X <= rect.X + rect.Width &&
+                   p.Y >= rect.Y && p.Y <= rect.Y + rect.Height;
+        }
     }
 }
