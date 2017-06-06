@@ -107,6 +107,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Protocolo\Protocolo.csproj">
+      <Project>{5ca5fc67-8e8b-47f9-b2bd-04eafa570c28}</Project>
+      <Name>Protocolo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{8902a579-8f28-4e55-b84c-94cea6dcea99}</Project>
       <Name>Utils</Name>

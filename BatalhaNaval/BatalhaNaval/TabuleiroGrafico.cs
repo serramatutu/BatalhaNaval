@@ -8,7 +8,7 @@ namespace BatalhaNaval
 {
     abstract class TabuleiroGrafico
     {
-        const int TAMANHO_GRADE = 10;
+        protected const int TAMANHO_GRADE = 10;
         public readonly int TAMANHO_LINHA = 2; // em px
         public static readonly Color COR_LINHA = Color.Black;
 

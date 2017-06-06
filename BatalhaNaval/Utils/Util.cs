@@ -79,5 +79,22 @@ namespace Utils
             return p.X >= rect.X && p.X <= rect.X + rect.Width &&
                    p.Y >= rect.Y && p.Y <= rect.Y + rect.Height;
         }
+
+        public static Bitmap RotateImage(Bitmap bmp, float angle)
+        {
+            angle = angle / 180 * (float)Math.PI; // Aceita ângulo em radianos
+
+            Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
+            using (Graphics g = Graphics.FromImage(rotatedImage))
+            {
+                g.TranslateTransform(bmp.Width / 2, bmp.Height / 2);
+                g.RotateTransform(angle);
+                g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
+                g.DrawImage(bmp, new Point(0, 0));
+                //g.ResetTransform();
+            }
+
+            return rotatedImage;
+        }
     }
 }

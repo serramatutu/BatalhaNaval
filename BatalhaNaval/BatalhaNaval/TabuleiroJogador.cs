@@ -2,6 +2,7 @@
 using System.Drawing;
 using System;
 using System.Collections.Generic;
+using Utils;
 
 namespace BatalhaNaval
 {
@@ -18,7 +19,6 @@ namespace BatalhaNaval
         }
 
 
-
         private void TabuleiroJogador_OnPaint(Graphics g, float width, float height)
         {
             if (mouseDownPosition != null)
@@ -31,10 +31,13 @@ namespace BatalhaNaval
         {
             foreach(KeyValuePair<int[], TipoDeNavio> navio in Tabuleiro.Navios)
             {
-                // Primeiro, obtém a direção de cada navio
-                int direcao;
+                Bitmap bmp = Util.RotateImage((Bitmap)GerenciadorDeNavios.Imagens[navio.Value], (navio.Key[2] + 1) % 4 * ((float)Math.PI / 2));
+
+                g.DrawImage(bmp, navio.Key[0] * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                                 navio.Key[1] * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                                 Math.Max(navio.Value.Tamanho() * (navio.Key[2] % 2), 1) * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA,
+                                 Math.Max(navio.Value.Tamanho() * ((navio.Key[2] + 1) % 2), 1) * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA);
             }
-            
         }
     }
 }

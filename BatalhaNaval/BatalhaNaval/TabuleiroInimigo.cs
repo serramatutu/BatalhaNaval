@@ -50,7 +50,7 @@ namespace BatalhaNaval
 
         protected override void DesenharNavios(Graphics g, float width, float height)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

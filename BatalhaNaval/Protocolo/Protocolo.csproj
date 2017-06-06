@@ -7,8 +7,8 @@
     <ProjectGuid>{5CA5FC67-8E8B-47F9-B2BD-04EAFA570C28}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BatalhaNaval</RootNamespace>
-    <AssemblyName>BatalhaNaval</AssemblyName>
+    <RootNamespace>Protocolo</RootNamespace>
+    <AssemblyName>Protocolo</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
