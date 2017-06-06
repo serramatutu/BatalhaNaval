@@ -47,5 +47,10 @@ namespace BatalhaNaval
                     DesenharNaCelulaDoMouse(g, width, height, idleHoverImg);
             }
         }
+
+        protected override void DesenharNavios(Graphics g, float width, float height)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

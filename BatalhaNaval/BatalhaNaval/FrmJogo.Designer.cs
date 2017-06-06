@@ -38,6 +38,8 @@
             this.lblCoord = new System.Windows.Forms.Label();
             this.pnlBotoes = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.lblInfo2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).BeginInit();
@@ -69,8 +71,8 @@
             this.telaJogador.Size = new System.Drawing.Size(400, 400);
             this.telaJogador.TabIndex = 1;
             this.telaJogador.TabStop = false;
-            //this.telaJogador.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragDrop);
-            //this.telaJogador.DragOver += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragOver);
+            this.telaJogador.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragDrop);
+            this.telaJogador.DragOver += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragOver);
             this.telaJogador.Paint += new System.Windows.Forms.PaintEventHandler(this.tela_Paint);
             this.telaJogador.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tela_MouseDown);
             this.telaJogador.MouseLeave += new System.EventHandler(this.tela_MouseLeave);
@@ -98,6 +100,8 @@
             // pnlStatus
             // 
             this.pnlStatus.BackColor = System.Drawing.Color.White;
+            this.pnlStatus.Controls.Add(this.lblInfo2);
+            this.pnlStatus.Controls.Add(this.lblInfo);
             this.pnlStatus.Controls.Add(this.lblStatus);
             this.pnlStatus.Controls.Add(this.lblCoord);
             this.pnlStatus.Location = new System.Drawing.Point(824, 12);
@@ -144,6 +148,24 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Botoes aqui";
             // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(13, 25);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(142, 15);
+            this.lblInfo.TabIndex = 2;
+            this.lblInfo.Text = "Q e E para rodar o navio ";
+            // 
+            // lblInfo2
+            // 
+            this.lblInfo2.AutoSize = true;
+            this.lblInfo2.Location = new System.Drawing.Point(13, 40);
+            this.lblInfo2.Name = "lblInfo2";
+            this.lblInfo2.Size = new System.Drawing.Size(89, 15);
+            this.lblInfo2.TabIndex = 3;
+            this.lblInfo2.Text = "Direção: baixo ";
+            // 
             // FrmJogo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -163,7 +185,7 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "Batalha Naval";
             this.Shown += new System.EventHandler(this.FrmJogo_Shown);
-            //this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FrmJogo_MouseDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmJogo_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).EndInit();
@@ -186,6 +208,8 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Panel pnlBotoes;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Label lblInfo2;
     }
 }
 

@@ -65,9 +65,14 @@ namespace BatalhaNaval
         {
             PictureBox tela = (PictureBox)sender;
             if (tela.Name == "telaInimigo")
-                tInimigo.MouseDown(e.Location);
+                if (e.Button == MouseButtons.Left)
+                    tInimigo.MouseDown(e.Location);
             else
-                tJogador.MouseDown(e.Location);
+            {
+                if (e.Button == MouseButtons.Left)
+                    tJogador.MouseDown(e.Location);
+            }
+                
         }
 
         private void tela_MouseUp(object sender, MouseEventArgs e)
@@ -130,9 +135,11 @@ namespace BatalhaNaval
                 gerenciadorDeNavios.Paint(e.Graphics);
         }
 
-        # region Drag Drop
 
-        //int direcao = 0;
+
+        # region Drag and Drop
+
+        int direcao = 0;
 
         private void telaMenu_MouseDown(object sender, MouseEventArgs e)
         {
@@ -142,43 +149,84 @@ namespace BatalhaNaval
             TipoDeNavio? navio = gerenciadorDeNavios.NavioEm(e.Location);
             if (navio.HasValue)
             {
-                //DoDragDrop(navio, DragDropEffects.Copy);
+                DoDragDrop(navio, DragDropEffects.Copy);
             }
         }
 
-        //private void AumentarDirecao()
-        //{
-        //     direcao = (direcao + 1) % 3;
-        //}
+        private void AumentarDirecao()
+        {
+            direcao = (direcao + 1) % 4;
 
-        //private void FrmJogo_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    if (e.Button == MouseButtons.Right)
-        //        AumentarDirecao();
-        //}
+            AtualizarLabelDirecao();
+        }
 
-        //private void telaJogador_DragOver(object sender, DragEventArgs e)
-        //{
-        //    if (sender == null)
-        //        return;
+        private void DiminuirDirecao()
+        {
+            direcao = --direcao < 0 ? 3 : direcao; // Bem feio mas funciona :-D
 
-        //    tJogador.MouseDown(telaJogador.PointToClient(new Point(e.X, e.Y)));
-        //    if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
-        //        e.Effect = DragDropEffects.Copy;
-        //}
+            AtualizarLabelDirecao();
+        }
 
-        //private void telaJogador_DragDrop(object sender, DragEventArgs e)
-        //{
-        //    TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
+        private void AtualizarLabelDirecao()
+        {
+            if (status ==  Status.PosicionandoNavios)
+                switch (direcao)
+                {
+                    case 0:
+                        lblInfo2.Text = "Direção: baixo";
+                        break;
+                    case 1:
+                        lblInfo2.Text = "Direção: esquerda";
+                        break;
+                    case 2:
+                        lblInfo2.Text = "Direção: cima";
+                        break;
+                    case 3:
+                        lblInfo2.Text = "Direção: direita";
+                        break;
+                }
+        }
 
-        //    Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
-        //    if (navio.HasValue)
-        //    {
-        //        tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
-        //        gerenciadorDeNavios.Remover(navio.Value);
-        //        gerenciadorDeNavios.Rearranjar();
-        //    }
-        //}
+        private void telaJogador_DragOver(object sender, DragEventArgs e)
+        {
+            if (sender == null)
+                return;
+
+            if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
+                e.Effect = DragDropEffects.Copy;
+        }
+
+        private void telaJogador_DragDrop(object sender, DragEventArgs e)
+        {
+            Cursor = Cursors.Default;
+
+            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
+
+            tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)));
+            Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
+
+            if (navio.HasValue)
+            {
+                tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
+                gerenciadorDeNavios.Remover(navio.Value);
+                gerenciadorDeNavios.Rearranjar();
+            }
+        }
+
+        private void FrmJogo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (status == Status.PosicionandoNavios)
+            {
+                if (e.KeyCode == Keys.Q)
+                {
+                    DiminuirDirecao();
+                }
+                else if (e.KeyCode == Keys.E)
+                {
+                    AumentarDirecao();
+                }
+            }
+        }
 
         #endregion
     }

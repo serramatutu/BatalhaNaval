@@ -1,5 +1,7 @@
 ﻿using Protocolo;
 using System.Drawing;
+using System;
+using System.Collections.Generic;
 
 namespace BatalhaNaval
 {
@@ -15,12 +17,24 @@ namespace BatalhaNaval
             OnPaint += TabuleiroJogador_OnPaint;
         }
 
+
+
         private void TabuleiroJogador_OnPaint(Graphics g, float width, float height)
         {
             if (mouseDownPosition != null)
                 DesenharNaCelulaDoMouse(g, width, height, clickImg);
             else if (mousePosition != null)
                 DesenharNaCelulaDoMouse(g, width, height, hoverImg);
+        }
+
+        protected override void DesenharNavios(Graphics g, float width, float height)
+        {
+            foreach(KeyValuePair<int[], TipoDeNavio> navio in Tabuleiro.Navios)
+            {
+                // Primeiro, obtém a direção de cada navio
+                int direcao;
+            }
+            
         }
     }
 }

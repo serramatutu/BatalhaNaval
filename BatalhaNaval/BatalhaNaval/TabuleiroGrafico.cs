@@ -9,10 +9,11 @@ namespace BatalhaNaval
     abstract class TabuleiroGrafico
     {
         const int TAMANHO_GRADE = 10;
-        public readonly int TAMANHO_LINHA = 0; // em px
+        public readonly int TAMANHO_LINHA = 2; // em px
         public static readonly Color COR_LINHA = Color.Black;
 
         #region Metodos de Pintar (não é PlayDoh)
+
         protected void DesenharLinhas(Graphics g, float width, float height)
         {
             if (TAMANHO_LINHA <= 0)
@@ -35,6 +36,8 @@ namespace BatalhaNaval
                 }
             }
         }
+
+        protected abstract void DesenharNavios(Graphics g, float width, float height);
 
         protected void DesenharNaCelulaDoMouse(Graphics g, float width, float height, Image img)
         {
@@ -64,6 +67,7 @@ namespace BatalhaNaval
                   width = g.VisibleClipBounds.Width;
 
             DesenharLinhas(g, width, height);
+            DesenharNavios(g, width, height);
 
             OnPaint(g, width, height);
         }
