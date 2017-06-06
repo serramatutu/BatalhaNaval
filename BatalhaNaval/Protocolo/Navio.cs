@@ -7,11 +7,11 @@
     /// </summary>
     public enum TipoDeNavio : uint
     {
-        PortaAvioes = 0x0105,
-        Encouracado = 0x0204,
-        Cruzador    = 0x0303,
-        Destroier   = 0x0202,
-        Submarino   = 0x0201
+        PortaAvioes = 0x00105,
+        Encouracado = 0x00104,
+        Cruzador    = 0x00103,
+        Destroier   = 0x00102,
+        Submarino   = 0x10102
     }
 
     /// <summary>

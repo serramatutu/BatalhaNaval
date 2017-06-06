@@ -260,7 +260,7 @@ namespace Protocolo
             foreach (Celula celula in celulas)
                 this[celula.Linha, celula.Coluna] = celula;
             
-            Navios.Add(new int[] { x, y }, tipo);
+            Navios.Add(new int[] { x, y, d }, tipo);
         }
 
         /// <summary>
