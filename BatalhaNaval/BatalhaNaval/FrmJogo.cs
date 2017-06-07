@@ -72,7 +72,6 @@ namespace BatalhaNaval
                 if (e.Button == MouseButtons.Left)
                     tJogador.MouseDown(e.Location);
             }
-                
         }
 
         private void tela_MouseUp(object sender, MouseEventArgs e)
@@ -149,7 +148,7 @@ namespace BatalhaNaval
             TipoDeNavio? navio = gerenciadorDeNavios.NavioEm(e.Location);
             if (navio.HasValue)
             {
-                DoDragDrop(navio, DragDropEffects.Copy);
+                DoDragDrop(navio.Value, DragDropEffects.Copy);
             }
         }
 
@@ -193,24 +192,24 @@ namespace BatalhaNaval
                 return;
 
             if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
+            {
                 e.Effect = DragDropEffects.Copy;
+                tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)), (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio)), direcao);
+            }
         }
 
         private void telaJogador_DragDrop(object sender, DragEventArgs e)
         {
             Cursor = Cursors.Default;
 
-            TipoDeNavio? navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
+            TipoDeNavio navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
 
-            tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)));
-            Point gridPos = tJogador.GetMouseGridPos(telaJogador.Width, telaJogador.Height);
+            if (!tJogador.DragDrop())
+                gerenciadorDeNavios.Adicionar(navio);
+            else
+                gerenciadorDeNavios.Remover(navio);
 
-            if (navio.HasValue)
-            {
-                tJogador.Tabuleiro.PosicionarNavio(navio.Value, gridPos.X, gridPos.Y, direcao);
-                gerenciadorDeNavios.Remover(navio.Value);
-                gerenciadorDeNavios.Rearranjar();
-            }
+            gerenciadorDeNavios.Rearranjar();
         }
 
         private void FrmJogo_KeyDown(object sender, KeyEventArgs e)
@@ -229,5 +228,10 @@ namespace BatalhaNaval
         }
 
         #endregion
+
+        private void telaJogador_DragLeave(object sender, EventArgs e)
+        {
+            tJogador.AbortDragDrop();
+        }
     }
 }

@@ -91,6 +91,7 @@ namespace Utils
                 g.RotateTransform(angle);
                 g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
                 g.DrawImage(bmp, new Point(0, 0));
+                //g.RotateTransform(-angle);
                 //g.ResetTransform();
             }
 

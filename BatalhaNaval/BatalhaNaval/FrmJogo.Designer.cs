@@ -34,12 +34,12 @@
             this.telaMenu = new System.Windows.Forms.PictureBox();
             this.animTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlStatus = new System.Windows.Forms.Panel();
+            this.lblInfo2 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblCoord = new System.Windows.Forms.Label();
             this.pnlBotoes = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.lblInfo2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).BeginInit();
@@ -73,6 +73,7 @@
             this.telaJogador.TabStop = false;
             this.telaJogador.DragDrop += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragDrop);
             this.telaJogador.DragOver += new System.Windows.Forms.DragEventHandler(this.telaJogador_DragOver);
+            this.telaJogador.DragLeave += new System.EventHandler(this.telaJogador_DragLeave);
             this.telaJogador.Paint += new System.Windows.Forms.PaintEventHandler(this.tela_Paint);
             this.telaJogador.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tela_MouseDown);
             this.telaJogador.MouseLeave += new System.EventHandler(this.tela_MouseLeave);
@@ -109,6 +110,24 @@
             this.pnlStatus.Padding = new System.Windows.Forms.Padding(10);
             this.pnlStatus.Size = new System.Drawing.Size(195, 400);
             this.pnlStatus.TabIndex = 3;
+            // 
+            // lblInfo2
+            // 
+            this.lblInfo2.AutoSize = true;
+            this.lblInfo2.Location = new System.Drawing.Point(13, 40);
+            this.lblInfo2.Name = "lblInfo2";
+            this.lblInfo2.Size = new System.Drawing.Size(89, 15);
+            this.lblInfo2.TabIndex = 3;
+            this.lblInfo2.Text = "Direção: baixo ";
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(13, 25);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(142, 15);
+            this.lblInfo.TabIndex = 2;
+            this.lblInfo.Text = "Q e E para rodar o navio ";
             // 
             // lblStatus
             // 
@@ -147,24 +166,6 @@
             this.label1.Size = new System.Drawing.Size(72, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Botoes aqui";
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(13, 25);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(142, 15);
-            this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = "Q e E para rodar o navio ";
-            // 
-            // lblInfo2
-            // 
-            this.lblInfo2.AutoSize = true;
-            this.lblInfo2.Location = new System.Drawing.Point(13, 40);
-            this.lblInfo2.Name = "lblInfo2";
-            this.lblInfo2.Size = new System.Drawing.Size(89, 15);
-            this.lblInfo2.TabIndex = 3;
-            this.lblInfo2.Text = "Direção: baixo ";
             // 
             // FrmJogo
             // 
