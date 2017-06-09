@@ -20,15 +20,17 @@ namespace Jogo
 
         #region Drag and Drop
 
-        public bool DragDrop()
+        public bool DragDrop(float width, float height)
         {
             if (navioArrastado == null)
                 throw new InvalidOperationException();
 
+            navioArrastado.Pos = GetMouseGridPos(width, height);
+
             bool ret = true;
             try
             {
-                Tabuleiro.PosicionarNavio(navioArrastado.Navio, navioArrastado.Pos.X, navioArrastado.Pos.Y, navioArrastado.Direcao);
+                Tabuleiro.PosicionarNavio(navioArrastado.Navio, navioArrastado.Pos.X, navioArrastado.Pos.Y, (Direcao)navioArrastado.Direcao);
             }
             catch
             {
@@ -66,10 +68,10 @@ namespace Jogo
 
         NavioInfo navioArrastado = null;
 
-        public void MouseMove(Point pos, TipoDeNavio navio, int direcao)
+        public void DragOver(Point pos, TipoDeNavio navio, int direcao)
         {
             MouseMove(pos);
-            navioArrastado = new NavioInfo(navio, direcao, default(Point));
+            navioArrastado = new NavioInfo(navio, direcao, pos); // Inicialmente, coloca a posição literal do mouse no navio
         }
 
         #endregion

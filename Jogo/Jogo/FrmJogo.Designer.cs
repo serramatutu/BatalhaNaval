@@ -39,7 +39,7 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblCoord = new System.Windows.Forms.Label();
             this.pnlBotoes = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnConectar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.telaInimigo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaJogador)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.telaMenu)).BeginInit();
@@ -151,21 +151,22 @@
             // pnlBotoes
             // 
             this.pnlBotoes.BackColor = System.Drawing.Color.White;
-            this.pnlBotoes.Controls.Add(this.label1);
+            this.pnlBotoes.Controls.Add(this.btnConectar);
             this.pnlBotoes.Location = new System.Drawing.Point(824, 424);
             this.pnlBotoes.Name = "pnlBotoes";
             this.pnlBotoes.Padding = new System.Windows.Forms.Padding(10);
             this.pnlBotoes.Size = new System.Drawing.Size(194, 165);
             this.pnlBotoes.TabIndex = 4;
             // 
-            // label1
+            // btnConectar
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(77, 57);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Botoes aqui";
+            this.btnConectar.Location = new System.Drawing.Point(14, 14);
+            this.btnConectar.Name = "btnConectar";
+            this.btnConectar.Size = new System.Drawing.Size(167, 23);
+            this.btnConectar.TabIndex = 0;
+            this.btnConectar.Text = "Conectar";
+            this.btnConectar.UseVisualStyleBackColor = true;
+            this.btnConectar.Click += new System.EventHandler(this.btnConectar_Click);
             // 
             // FrmJogo
             // 
@@ -193,7 +194,6 @@
             this.pnlStatus.ResumeLayout(false);
             this.pnlStatus.PerformLayout();
             this.pnlBotoes.ResumeLayout(false);
-            this.pnlBotoes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -208,9 +208,9 @@
         private System.Windows.Forms.Label lblCoord;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Panel pnlBotoes;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Label lblInfo2;
+        private System.Windows.Forms.Button btnConectar;
     }
 }
 

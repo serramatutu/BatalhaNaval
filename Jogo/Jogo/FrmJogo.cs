@@ -37,21 +37,37 @@ namespace Jogo
             animTimer.Interval = 1000 / FPS;
         }
 
+        bool podeConectar;
+
+        bool PodeConectar {
+            get { return podeConectar; }
+            set
+            {
+                btnConectar.Enabled = value;
+                podeConectar = value;
+            }
+        }
+
         private void Conectar()
         {
-            FrmConectar frm = new FrmConectar(cliente);
+            if (PodeConectar)
+            {
+                FrmConectar frm = new FrmConectar(cliente, tJogador.Tabuleiro);
 
-            Status anterior = status;
-            status = Status.Conectando;
+                Status anterior = status;
+                status = Status.Conectando;
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
-                status = Status.Jogando;
-            else
-                status = anterior;
+                if (frm.ShowDialog(this) == DialogResult.OK)
+                    status = Status.Jogando;
+                else
+                    status = anterior;
+            } 
         }
 
         private void PosicionarNavios()
         {
+            PodeConectar = false;
+
             tJogador = new TabuleiroJogador();
             tInimigo = new TabuleiroInimigo();
 
@@ -194,7 +210,7 @@ namespace Jogo
             if (e.Data.GetDataPresent(typeof(TipoDeNavio)))
             {
                 e.Effect = DragDropEffects.Copy;
-                tJogador.MouseMove(telaJogador.PointToClient(new Point(e.X, e.Y)), (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio)), direcao);
+                tJogador.DragOver(telaJogador.PointToClient(new Point(e.X, e.Y)), (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio)), direcao);
             }
         }
 
@@ -204,10 +220,17 @@ namespace Jogo
 
             TipoDeNavio navio = (TipoDeNavio)e.Data.GetData(typeof(TipoDeNavio));
 
-            if (tJogador.DragDrop())
+            tJogador.DragOver(telaJogador.PointToClient(new Point(e.X, e.Y)), navio, direcao);
+            if (tJogador.DragDrop(telaJogador.Width, telaJogador.Height))
+            {
                 gerenciadorDeNavios.Remover(navio);
+                gerenciadorDeNavios.Rearranjar();
 
-            gerenciadorDeNavios.Rearranjar();
+                if (tJogador.Tabuleiro.EstaCompleto()) // Terminou de posicionar navios
+                {
+                    PodeConectar = true;
+                }
+            }
         }
 
         private void FrmJogo_KeyDown(object sender, KeyEventArgs e)
@@ -230,6 +253,11 @@ namespace Jogo
         private void telaJogador_DragLeave(object sender, EventArgs e)
         {
             tJogador.AbortDragDrop();
+        }
+
+        private void btnConectar_Click(object sender, EventArgs e)
+        {
+            Conectar();
         }
     }
 }
