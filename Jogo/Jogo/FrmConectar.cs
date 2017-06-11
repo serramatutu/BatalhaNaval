@@ -2,13 +2,18 @@
 using System.Windows.Forms;
 
 using BatalhaNaval;
+using System.Net;
+using System.Collections.Generic;
 
 namespace Jogo
 {
     public partial class FrmConectar : Form
     {
-        ClienteP2P cliente;
+        public ClienteP2P Cliente { get; private set; }
+
         Tabuleiro tabuleiro;
+
+        List<IPAddress> clientesDisponiveis = new List<IPAddress>();
 
         public FrmConectar(ClienteP2P cliente, Tabuleiro tabuleiro)
         {
@@ -19,43 +24,108 @@ namespace Jogo
                 throw new ArgumentException("Tabuleiro não pode estar incompleto");
 
             this.tabuleiro = tabuleiro;
-            this.cliente = cliente;
+            this.Cliente = cliente;
 
             InitializeComponent();
         }
 
-        private void Cliente_OnClienteIndisponivel(System.Net.IPAddress addr)
+        private void AtualizarListbox()
         {
-            lsbClientes.Items.Remove(addr.ToString());
+            lsbClientes.Items.Clear();
+
+            foreach (IPAddress c in clientesDisponiveis)
+                lsbClientes.Items.Add(c.ToString());
         }
 
-        private void Cliente_OnClienteConectado(System.Net.IPAddress addr)
+        private void Cliente_OnClienteIndisponivel(IPAddress addr)
+        {
+            clientesDisponiveis.Add(addr);
+            AtualizarListbox();
+        }
+
+        private void Cliente_OnClienteConectado(IPAddress addr)
         {
             //throw new NotImplementedException();
         }
 
-        private void Cliente_OnClienteDisponivel(System.Net.IPAddress addr)
+        private void Cliente_OnClienteDisponivel(IPAddress addr)
         {
-            lsbClientes.Items.Add(addr.ToString());
+            clientesDisponiveis.Add(addr);
+            AtualizarListbox();
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(txtNome.Text))
-                btnConectar.Enabled = false;
+                btnMain.Enabled = false;
+            else
+                btnMain.Enabled = true;
+        }
+
+        #region Botao
+
+        private enum StatusBotao
+        {
+            Conectar,
+            Procurar,
+            Cancelar
+        }
+
+        private StatusBotao status = StatusBotao.Procurar;
+
+        private StatusBotao Status
+        {
+            get
+            {
+                return status;
+            }
+
+            set
+            {
+                txtNome.Enabled = true;
+
+                if (value == StatusBotao.Procurar)
+                {
+                    btnMain.Text = "Procurar";
+                    txtNome.Enabled = false;
+                }
+                else if (value == StatusBotao.Cancelar)
+                    btnMain.Text = "Cancelar";
+                else
+                    btnMain.Text = "Conectar";
+                   
+                status = value;
+            }
+        }
+
+        private void btnMain_Click(object sender, EventArgs e)
+        {
+            if (status == StatusBotao.Procurar)
+            {
+                Status = StatusBotao.Cancelar;
+
+                Cliente = new ClienteP2P(txtNome.Text, tabuleiro);
+            }
+            else if (status == StatusBotao.Conectar)
+            {
+                Cliente.SolicitarConexao(clientesDisponiveis[lsbClientes.SelectedIndex]);
+            }
             else
             {
-                btnConectar.Enabled = true;
-
-                cliente = new ClienteP2P(txtNome.Text, tabuleiro);
-
-                cliente.OnClienteDisponivel += Cliente_OnClienteDisponivel;
-                cliente.OnClienteIndisponivel += Cliente_OnClienteIndisponivel;
-                cliente.OnClienteConectado += Cliente_OnClienteConectado;
-
-                cliente.Iniciar();
+                Cliente = null;
+                AtualizarListbox();
+                Status = StatusBotao.Procurar;
             }
-                
+        }
+
+        #endregion
+
+        private void lsbClientes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lsbClientes.SelectedIndex < 0)
+                Status = StatusBotao.Cancelar;
+            else
+                Status = StatusBotao.Conectar;
         }
     }
 }

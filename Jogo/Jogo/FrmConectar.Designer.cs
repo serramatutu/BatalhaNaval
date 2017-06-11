@@ -30,8 +30,8 @@
         {
             this.txtNome = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnConectar = new System.Windows.Forms.Button();
             this.lsbClientes = new System.Windows.Forms.ListBox();
+            this.btnMain = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtNome
@@ -51,16 +51,6 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Nome:";
             // 
-            // btnConectar
-            // 
-            this.btnConectar.Enabled = false;
-            this.btnConectar.Location = new System.Drawing.Point(12, 325);
-            this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(460, 23);
-            this.btnConectar.TabIndex = 3;
-            this.btnConectar.Text = "Conectar";
-            this.btnConectar.UseVisualStyleBackColor = true;
-            // 
             // lsbClientes
             // 
             this.lsbClientes.FormattingEnabled = true;
@@ -68,14 +58,26 @@
             this.lsbClientes.Name = "lsbClientes";
             this.lsbClientes.Size = new System.Drawing.Size(457, 277);
             this.lsbClientes.TabIndex = 4;
+            this.lsbClientes.SelectedIndexChanged += new System.EventHandler(this.lsbClientes_SelectedIndexChanged);
+            // 
+            // btnMain
+            // 
+            this.btnMain.Enabled = false;
+            this.btnMain.Location = new System.Drawing.Point(15, 325);
+            this.btnMain.Name = "btnMain";
+            this.btnMain.Size = new System.Drawing.Size(457, 23);
+            this.btnMain.TabIndex = 5;
+            this.btnMain.Text = "Procurar";
+            this.btnMain.UseVisualStyleBackColor = true;
+            this.btnMain.Click += new System.EventHandler(this.btnMain_Click);
             // 
             // FrmConectar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 361);
+            this.Controls.Add(this.btnMain);
             this.Controls.Add(this.lsbClientes);
-            this.Controls.Add(this.btnConectar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtNome);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -90,7 +92,7 @@
 
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnConectar;
         private System.Windows.Forms.ListBox lsbClientes;
+        private System.Windows.Forms.Button btnMain;
     }
 }
