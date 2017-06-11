@@ -37,6 +37,8 @@ namespace Jogo
             animTimer.Interval = 1000 / FPS;
         }
 
+        #region Conectar
+
         bool podeConectar;
 
         bool PodeConectar {
@@ -46,6 +48,11 @@ namespace Jogo
                 btnConectar.Enabled = value;
                 podeConectar = value;
             }
+        }
+
+        private void btnConectar_Click(object sender, EventArgs e)
+        {
+            Conectar();
         }
 
         private void Conectar()
@@ -58,11 +65,55 @@ namespace Jogo
                 status = Status.Conectando;
 
                 if (frm.ShowDialog(this) == DialogResult.OK)
+                {
                     status = Status.Jogando;
+                    cliente = frm.Cliente;
+                    lblInfo.Text = "Vez de asdasdasd";
+                    lblInfo2.Text = "Jogando contra " + cliente.NomeRemoto;
+                    ConfigurarCliente();
+                }
                 else
                     status = anterior;
             } 
         }
+
+        public void ConfigurarCliente()
+        {
+            cliente.OnResultadoDeTiro += Cliente_OnResultadoDeTiro;
+            cliente.OnDarTiro += Cliente_OnDarTiro;
+            cliente.OnTiroRecebido += Cliente_OnTiroRecebido;
+            cliente.OnClienteDesconectado += Cliente_OnClienteDesconectado;
+        }
+
+        #endregion
+
+        #region Jogo
+        private void Cliente_OnClienteDesconectado(System.Net.IPAddress addr)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Cliente_OnTiroRecebido(Tiro t)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Cliente_OnResultadoDeTiro(Tiro t, ResultadoDeTiro resultado)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Cliente_OnDarTiro()
+        {
+            tInimigo.PodeAtirar = true;
+        }
+
+        private void TInimigo_OnTiroDado(int x, int y)
+        {
+            cliente.DarTiro(x, y);
+        }
+
+        #endregion
 
         private void PosicionarNavios()
         {
@@ -71,12 +122,13 @@ namespace Jogo
             tJogador = new TabuleiroJogador();
             tInimigo = new TabuleiroInimigo();
 
+            tInimigo.OnTiroDado += TInimigo_OnTiroDado;
             gerenciadorDeNavios = new GerenciadorDeNavios(telaMenu.Width, telaMenu.Height);
 
             status = Status.PosicionandoNavios;
         }
 
-        #region Eventos do jogo
+        #region Eventos
         private void tela_MouseDown(object sender, MouseEventArgs e)
         {
             PictureBox tela = (PictureBox)sender;
@@ -248,16 +300,11 @@ namespace Jogo
             }
         }
 
-        #endregion
-
         private void telaJogador_DragLeave(object sender, EventArgs e)
         {
             tJogador.AbortDragDrop();
         }
 
-        private void btnConectar_Click(object sender, EventArgs e)
-        {
-            Conectar();
-        }
+        #endregion
     }
 }

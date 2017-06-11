@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BatalhaNaval;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -35,7 +36,14 @@ namespace Jogo
             if (PodeAtirar)
             {
                 if (mouseDownPosition != null)
+                {
                     DesenharNaCelulaDoMouse(g, width, height, clickImg);
+                    Point pos = GetMouseGridPos(width, height);
+
+                    OnTiroDado(pos.X, pos.Y);
+                    PodeAtirar = false;
+                }
+                    
                 else if (mousePosition != null)
                     DesenharNaCelulaDoMouse(g, width, height, hoverImg);
             }
@@ -47,6 +55,10 @@ namespace Jogo
                     DesenharNaCelulaDoMouse(g, width, height, idleHoverImg);
             }
         }
+
+        public delegate void EventoTiroDado(int x, int y);
+
+        public event EventoTiroDado OnTiroDado;
 
         protected override void DesenharNavios(Graphics g, float width, float height)
         {

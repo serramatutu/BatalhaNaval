@@ -90,16 +90,12 @@ namespace Jogo
 
                     navioArrastado.Valido = true;
 
-                    Bitmap bmp = new Bitmap(GerenciadorDeNavios.Imagens[navioArrastado.Navio]);
-
                     int offsetX = 0,
                         offsetY = 0;
 
                     switch (navioArrastado.Direcao) // Calcula se a posição do navio é valida
                     {
                         case 0: // Baixo
-                            bmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
-
                             if (navioArrastado.Pos.X < 0 || navioArrastado.Pos.X >= Tabuleiro.NumeroDeLinhas)
                                 navioArrastado.Valido = false;
 
@@ -119,7 +115,6 @@ namespace Jogo
 
                         case 2: // Cima
                             offsetY = navioArrastado.Navio.Tamanho() - 1;
-                            bmp.RotateFlip(RotateFlipType.Rotate270FlipNone);
 
                             if (navioArrastado.Pos.X < 0 || navioArrastado.Pos.X >= Tabuleiro.NumeroDeLinhas)
                                 navioArrastado.Valido = false;
@@ -153,9 +148,7 @@ namespace Jogo
         {
             foreach(KeyValuePair<int[], TipoDeNavio> navio in Tabuleiro.Navios)
             {
-                //Bitmap bmp = Util.RotateImage((Bitmap)GerenciadorDeNavios.Imagens[navio.Value], (navio.Key[2] + 1) % 4 * ((float)Math.PI / 2));
                 Bitmap bmp = new Bitmap(GerenciadorDeNavios.Imagens[navio.Value]);
-
                 int offsetX = 0,
                     offsetY = 0;
 
@@ -180,6 +173,8 @@ namespace Jogo
                                  (navio.Key[1] - offsetY) * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
                                  Math.Max(navio.Value.Tamanho() * (navio.Key[2] % 2), 1) * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA,
                                  Math.Max(navio.Value.Tamanho() * ((navio.Key[2] + 1) % 2), 1) * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA);
+
+                GC.Collect(); // Temporário. Rever memory leak
             }
         }
     }

@@ -15,6 +15,8 @@ namespace Jogo
 
         List<IPAddress> clientesDisponiveis = new List<IPAddress>();
 
+        public bool Conectado { get; private set; }
+
         public FrmConectar(ClienteP2P cliente, Tabuleiro tabuleiro)
         {
             if (tabuleiro == null)
@@ -25,6 +27,7 @@ namespace Jogo
 
             this.tabuleiro = tabuleiro;
             this.Cliente = cliente;
+            this.Conectado = false;
 
             InitializeComponent();
         }
@@ -39,19 +42,39 @@ namespace Jogo
 
         private void Cliente_OnClienteIndisponivel(IPAddress addr)
         {
-            clientesDisponiveis.Add(addr);
-            AtualizarListbox();
+            Invoke(new Action(delegate() {
+                clientesDisponiveis.Remove(addr);
+                AtualizarListbox();
+            }));
         }
 
         private void Cliente_OnClienteConectado(IPAddress addr)
         {
-            //throw new NotImplementedException();
+            Invoke(new Action(delegate () {
+                DialogResult = DialogResult.OK;
+            }));
         }
 
         private void Cliente_OnClienteDisponivel(IPAddress addr)
         {
-            clientesDisponiveis.Add(addr);
-            AtualizarListbox();
+            Invoke(new Action(delegate () {
+                clientesDisponiveis.Add(addr);
+                AtualizarListbox();
+            })); 
+        }
+
+        private bool Cliente_OnClienteRequisitandoConexao(IPAddress addr)
+        {
+            return (bool)Invoke(new Func<bool>(() => {
+                if (Conectado)
+                    return false;
+
+                return MessageBox.Show(this, "Deseja se conectar com " + addr.ToString() + "?",
+                                       "Solicitação de " + addr.ToString(),
+                                       MessageBoxButtons.YesNo,
+                                       MessageBoxIcon.Question,
+                                       MessageBoxDefaultButton.Button1) == DialogResult.Yes;
+            }));
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
@@ -105,6 +128,10 @@ namespace Jogo
                 Status = StatusBotao.Cancelar;
 
                 Cliente = new ClienteP2P(txtNome.Text, tabuleiro);
+                Cliente.OnClienteDisponivel += Cliente_OnClienteDisponivel;
+                Cliente.OnClienteConectado += Cliente_OnClienteConectado;
+                Cliente.OnClienteIndisponivel += Cliente_OnClienteIndisponivel;
+                Cliente.OnClienteRequisitandoConexao += Cliente_OnClienteRequisitandoConexao;
             }
             else if (status == StatusBotao.Conectar)
             {

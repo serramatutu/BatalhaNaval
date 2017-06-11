@@ -12,7 +12,7 @@ namespace Jogo
         public readonly int TAMANHO_LINHA = 2; // em px
         public static readonly Color COR_LINHA = Color.Black;
 
-        #region Metodos de Pintar (não é PlayDoh)
+        #region Metodos de Pintar
 
         protected void DesenharLinhas(Graphics g, float width, float height)
         {
