@@ -26,8 +26,8 @@ namespace Jogo
                 throw new ArgumentException("Tabuleiro não pode estar incompleto");
 
             this.tabuleiro = tabuleiro;
-            this.Cliente = cliente;
-            this.Conectado = false;
+            Cliente = cliente;
+            Conectado = false;
 
             InitializeComponent();
         }
@@ -37,35 +37,86 @@ namespace Jogo
             lsbClientes.Items.Clear();
 
             foreach (IPAddress c in clientesDisponiveis)
-                lsbClientes.Items.Add(c.ToString());
+                lsbClientes.Items.Add(c);
         }
 
         private void Cliente_OnClienteIndisponivel(IPAddress addr)
         {
-            Invoke(new Action(delegate() {
+            if (InvokeRequired && !Disposing)
+                try
+                {
+                    Invoke(new Action(delegate () {
+                        Cliente_OnClienteDisponivel(addr);
+                    }));
+                }
+                catch { }
+            else
+            {
                 clientesDisponiveis.Remove(addr);
                 AtualizarListbox();
-            }));
+            }
         }
 
         private void Cliente_OnClienteConectado(IPAddress addr)
         {
-            Invoke(new Action(delegate () {
+            if (InvokeRequired && !Disposing)
+                try
+                {
+                    Invoke(new Action(delegate () {
+                        Cliente_OnClienteConectado(addr);
+                    }));
+                }
+                catch { }
+            else
+            {
+                //Cliente.Close();
+
+                //Cliente.OnClienteDisponivel -= Cliente_OnClienteDisponivel;
+                //Cliente.OnClienteConectado -= Cliente_OnClienteConectado;
+                //Cliente.OnClienteIndisponivel -= Cliente_OnClienteIndisponivel;
+                //Cliente.OnClienteRequisitandoConexao -= Cliente_OnClienteRequisitandoConexao;
+
                 DialogResult = DialogResult.OK;
-            }));
+            }
         }
 
         private void Cliente_OnClienteDisponivel(IPAddress addr)
         {
-            Invoke(new Action(delegate () {
-                clientesDisponiveis.Add(addr);
-                AtualizarListbox();
-            })); 
+            if (InvokeRequired && !Disposing) 
+                try
+                {
+                    Invoke(new Action(delegate () {
+                        Cliente_OnClienteDisponivel(addr);
+                    }));
+                }
+                catch { }
+            else
+            {
+                if (!clientesDisponiveis.Contains(addr))
+                {
+                    clientesDisponiveis.Add(addr);
+                    AtualizarListbox();
+                }
+            }
         }
 
         private bool Cliente_OnClienteRequisitandoConexao(IPAddress addr)
         {
-            return (bool)Invoke(new Func<bool>(() => {
+            if (InvokeRequired && !Disposing)
+            {
+                try
+                {
+                    return (bool)Invoke(new Func<bool>(() => {
+                        return Cliente_OnClienteRequisitandoConexao(addr);
+                    }));
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else
+            {
                 if (Conectado)
                     return false;
 
@@ -74,7 +125,8 @@ namespace Jogo
                                        MessageBoxButtons.YesNo,
                                        MessageBoxIcon.Question,
                                        MessageBoxDefaultButton.Button1) == DialogResult.Yes;
-            }));
+            }
+            
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
@@ -128,10 +180,15 @@ namespace Jogo
                 Status = StatusBotao.Cancelar;
 
                 Cliente = new ClienteP2P(txtNome.Text, tabuleiro);
+
+                OnConfigurarCliente?.Invoke(Cliente);
+
                 Cliente.OnClienteDisponivel += Cliente_OnClienteDisponivel;
                 Cliente.OnClienteConectado += Cliente_OnClienteConectado;
                 Cliente.OnClienteIndisponivel += Cliente_OnClienteIndisponivel;
                 Cliente.OnClienteRequisitandoConexao += Cliente_OnClienteRequisitandoConexao;
+    
+                Cliente.Iniciar();
             }
             else if (status == StatusBotao.Conectar)
             {
@@ -144,6 +201,14 @@ namespace Jogo
                 Status = StatusBotao.Procurar;
             }
         }
+
+        #endregion
+
+        #region Configurar Cliente
+
+        public delegate void EventoConfigurarCliente(ClienteP2P cliente);
+
+        public event EventoConfigurarCliente OnConfigurarCliente;
 
         #endregion
 

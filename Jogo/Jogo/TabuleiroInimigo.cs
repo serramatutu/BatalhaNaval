@@ -10,14 +10,14 @@ namespace Jogo
 {
     enum StatusCelula
     {
-        Desconhecido,
+        Desconhecido, // Desconhecido é o valor padrão
         Navio,
         Agua
     }
 
     sealed class TabuleiroInimigo : TabuleiroGrafico
     {
-        Dictionary<Point, StatusCelula> celulas = new Dictionary<Point, StatusCelula>();
+        StatusCelula[,] celulas = new StatusCelula[TAMANHO_GRADE, TAMANHO_GRADE]; 
 
         public bool PodeAtirar { get; set; }
 
@@ -33,6 +33,7 @@ namespace Jogo
 
         private void TabuleiroInimigo_OnPaint(Graphics g, float width, float height)
         {
+            DesenharCelulas(g, width, height);
             if (PodeAtirar)
             {
                 if (mouseDownPosition != null)
@@ -40,7 +41,7 @@ namespace Jogo
                     DesenharNaCelulaDoMouse(g, width, height, clickImg);
                     Point pos = GetMouseGridPos(width, height);
 
-                    OnTiroDado(pos.X, pos.Y);
+                    OnTiroDado?.Invoke(pos.X, pos.Y);
                     PodeAtirar = false;
                 }
                     
@@ -60,9 +61,41 @@ namespace Jogo
 
         public event EventoTiroDado OnTiroDado;
 
-        protected override void DesenharNavios(Graphics g, float width, float height)
+        public void ResultadoTiro(Tiro t, ResultadoDeTiro r)
         {
-            //throw new NotImplementedException();
+            StatusCelula s = StatusCelula.Agua;
+
+            if (r == ResultadoDeTiro.Acertou || r == ResultadoDeTiro.Afundou)
+                s = StatusCelula.Navio;
+
+            celulas[t.X, t.Y] = s;
+        }
+
+        public void DesenharCelulas(Graphics g, float width, float height)
+        {
+            for (int i=0; i<celulas.GetLength(0); i++)
+                for (int j=0; j<celulas.GetLength(1); j++)
+                {
+                    Brush b = null;
+                    switch (celulas[i, j])
+                    {
+                        case StatusCelula.Desconhecido:
+                            b = Brushes.LightGray;
+                            break;
+                        case StatusCelula.Agua:
+                            b = Brushes.Aquamarine;
+                            break;
+                        case StatusCelula.Navio:
+                            b = Brushes.Red;
+                            break;
+                    }
+
+                    g.FillRectangle(b,
+                                    i * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                                    j * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                                    ((width - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA,
+                                    ((height - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA);
+                }
         }
     }
 }

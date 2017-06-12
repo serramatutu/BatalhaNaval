@@ -11,11 +11,13 @@ namespace Jogo
         public Tabuleiro Tabuleiro { get; set; } = new Tabuleiro();
 
         private readonly Image hoverImg = Image.FromFile("../../resources/playerHover.png"),
-                               clickImg = Image.FromFile("../../resources/playerClick.png");
+                               clickImg = Image.FromFile("../../resources/playerClick.png"),
+                               tiroImg = Image.FromFile("../../resources/tiro.png");
 
         public TabuleiroJogador()
         {
             OnPaint += TabuleiroJogador_OnPaint;
+            TirosInimigos = new HashSet<Point>();
         }
 
         #region Drag and Drop
@@ -76,8 +78,20 @@ namespace Jogo
 
         #endregion
 
+        public HashSet<Point> TirosInimigos { get; private set; }
+
+        public void TiroRecebido(int x, int y)
+        {
+            TirosInimigos.Add(new Point(x, y));
+        }
+
+        #region Pintar
+
         private void TabuleiroJogador_OnPaint(Graphics g, float width, float height)
         {
+            DesenharNavios(g, width, height);
+            DesenharTiros(g, width, height);
+
             if (mouseDownPosition != null)
                 DesenharNaCelulaDoMouse(g, width, height, clickImg);
             else if (mousePosition != null)
@@ -140,11 +154,10 @@ namespace Jogo
                                     Math.Max(navioArrastado.Navio.Tamanho() * (navioArrastado.Direcao % 2), 1) * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA,
                                     Math.Max(navioArrastado.Navio.Tamanho() * ((navioArrastado.Direcao + 1) % 2), 1) * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) - TAMANHO_LINHA);
                 }
-            }
-                
+            }            
         }
 
-        protected override void DesenharNavios(Graphics g, float width, float height)
+        private void DesenharNavios(Graphics g, float width, float height)
         {
             foreach(KeyValuePair<int[], TipoDeNavio> navio in Tabuleiro.Navios)
             {
@@ -177,5 +190,14 @@ namespace Jogo
                 GC.Collect(); // Temporário. Rever memory leak
             }
         }
+
+        private void DesenharTiros(Graphics g, float width, float height)
+        {
+            foreach(Point p in TirosInimigos)
+            {
+                DesenharNaCelula(g, width, height, tiroImg, p.X, p.Y);
+            }
+        } 
+        #endregion
     }
 }

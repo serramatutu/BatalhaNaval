@@ -37,22 +37,26 @@ namespace Jogo
             }
         }
 
-        protected abstract void DesenharNavios(Graphics g, float width, float height);
-
-        protected void DesenharNaCelulaDoMouse(Graphics g, float width, float height, Image img)
+        protected void DesenharNaCelula(Graphics g, float width, float height, Image img, int x, int y)
         {
-            Point gridPos = GetMouseGridPos(width, height);
-
-            if (gridPos.X > TAMANHO_GRADE || gridPos.Y > TAMANHO_GRADE)
+            if (x > TAMANHO_GRADE || y > TAMANHO_GRADE)
                 throw new InvalidOperationException("As definições do Graphics passado como parâmentro não condizem com" +
                                                     " a posição do mouse passada.");
 
             lock (g)
                 g.DrawImage(img,
-                            gridPos.X * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
-                            gridPos.Y * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                            x * ((width - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
+                            y * ((height - TAMANHO_LINHA) / TAMANHO_GRADE) + TAMANHO_LINHA,
                             width / TAMANHO_GRADE - TAMANHO_LINHA,
                             height / TAMANHO_GRADE - TAMANHO_LINHA);
+
+        }
+
+        protected void DesenharNaCelulaDoMouse(Graphics g, float width, float height, Image img)
+        {
+            Point gridPos = GetMouseGridPos(width, height);
+
+            DesenharNaCelula(g, width, height, img, gridPos.X, gridPos.Y);
         }
 
         #endregion
@@ -67,7 +71,6 @@ namespace Jogo
                   width = g.VisibleClipBounds.Width;
 
             DesenharLinhas(g, width, height);
-            DesenharNavios(g, width, height);
 
             OnPaint(g, width, height);
         }

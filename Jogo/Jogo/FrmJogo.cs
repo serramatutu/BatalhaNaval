@@ -60,6 +60,7 @@ namespace Jogo
             if (PodeConectar)
             {
                 FrmConectar frm = new FrmConectar(cliente, tJogador.Tabuleiro);
+                frm.OnConfigurarCliente += ConfigurarCliente;
 
                 Status anterior = status;
                 status = Status.Conectando;
@@ -68,21 +69,30 @@ namespace Jogo
                 {
                     status = Status.Jogando;
                     cliente = frm.Cliente;
-                    lblInfo.Text = "Vez de asdasdasd";
-                    lblInfo2.Text = "Jogando contra " + cliente.NomeRemoto;
-                    ConfigurarCliente();
+                    lblInfo.Text = "Jogando contra " + cliente.NomeRemoto;
+                    lblInfo2.Text = "";
                 }
                 else
                     status = anterior;
             } 
         }
 
-        public void ConfigurarCliente()
+        public void ConfigurarCliente(ClienteP2P cliente)
         {
-            cliente.OnResultadoDeTiro += Cliente_OnResultadoDeTiro;
-            cliente.OnDarTiro += Cliente_OnDarTiro;
-            cliente.OnTiroRecebido += Cliente_OnTiroRecebido;
-            cliente.OnClienteDesconectado += Cliente_OnClienteDesconectado;
+            if (InvokeRequired && !Disposing)
+            {
+                Invoke(new Action(delegate ()
+                {
+                    ConfigurarCliente(cliente);
+                }));
+            }
+            else
+            {
+                cliente.OnResultadoDeTiro += Cliente_OnResultadoDeTiro;
+                cliente.OnDarTiro += Cliente_OnDarTiro;
+                cliente.OnTiroRecebido += Cliente_OnTiroRecebido;
+                cliente.OnClienteDesconectado += Cliente_OnClienteDesconectado;
+            }
         }
 
         #endregion
@@ -90,27 +100,47 @@ namespace Jogo
         #region Jogo
         private void Cliente_OnClienteDesconectado(System.Net.IPAddress addr)
         {
-            throw new NotImplementedException();
+            Invoke(new Action(delegate()
+            {
+                MessageBox.Show(this, "O cliente se desconectou", "Cliente desconectado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                cliente = null;
+                PosicionarNavios();
+            }));
         }
 
         private void Cliente_OnTiroRecebido(Tiro t)
         {
-            throw new NotImplementedException();
+            Invoke(new Action(delegate ()
+            {
+                tJogador.TiroRecebido(t.X, t.Y);
+            }));
         }
 
         private void Cliente_OnResultadoDeTiro(Tiro t, ResultadoDeTiro resultado)
         {
-            throw new NotImplementedException();
+            if (resultado == ResultadoDeTiro.Ganhou)
+            {
+                MessageBox.Show(this, "Você ganhou!", "UHUL :)", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                cliente = null;
+                PosicionarNavios();
+            }
+
+            tInimigo.ResultadoTiro(t, resultado);
         }
 
         private void Cliente_OnDarTiro()
         {
-            tInimigo.PodeAtirar = true;
+            Invoke(new Action(delegate ()
+            {
+                lblStatus.Text = "Sua vez";
+                tInimigo.PodeAtirar = true;
+            }));
         }
 
         private void TInimigo_OnTiroDado(int x, int y)
         {
             cliente.DarTiro(x, y);
+            lblStatus.Text = "Vez do oponente";
         }
 
         #endregion
@@ -124,6 +154,12 @@ namespace Jogo
 
             tInimigo.OnTiroDado += TInimigo_OnTiroDado;
             gerenciadorDeNavios = new GerenciadorDeNavios(telaMenu.Width, telaMenu.Height);
+
+            direcao = 0;
+
+            lblStatus.Text = "Escolhendo posições";
+            lblInfo.Text = "Q e E para rodar o navio.";
+            lblInfo2.Text = "Direção: baixo";
 
             status = Status.PosicionandoNavios;
         }
@@ -201,7 +237,6 @@ namespace Jogo
             if (status == Status.PosicionandoNavios)
                 gerenciadorDeNavios.Paint(e.Graphics);
         }
-
 
 
         # region Drag and Drop
